@@ -96,6 +96,12 @@ Some fixed paragraph
 More paragraphs
 ```
 
+## Todo
+
+It should be possible to just create the message and export it as EML, without providing any credentials or SMTP server.
+
+Addressee-specific headers and attachments will probably be needed at some point.
+
 ## License
 
 This project is [licensed under the EUPL](https://choosealicense.com/licenses/eupl-1.2/).
