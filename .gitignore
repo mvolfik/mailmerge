@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+/.venv/
+
+/data/**
+!/data/example.yaml
+
+/templates/**
+!/templates/example.md
+!/templates/example-signature.txt
+!/templates/example-signature.html
+
+# there are likely to be credentials stored here. only the example one should be in git
+/senderconfig.json

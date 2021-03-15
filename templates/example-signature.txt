@@ -1,0 +1,7 @@
+John Doe
+
+---
+My website: example.com
+
+This signature is only visible in the plaintext version of this email. Please enable HTML viewing in your client to see
+an image of a kitten.

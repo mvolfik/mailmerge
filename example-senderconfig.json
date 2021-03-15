@@ -1,0 +1,20 @@
+{
+  "test": {
+    "headers": {
+      "From": "Your Name <your-email@example.com>"
+    },
+    "server": "smtp.example.com",
+    "login": "your-email@example.com",
+    "pwd": "veryS3cr3t",
+    "override_recipient": "my-testing-inbox@example.com"
+  },
+  "prod": {
+    "headers": {
+      "From": "Your Name <your-email@example.com>",
+      "CC": "company-archives@example.com"
+    },
+    "server": "smtp.example.com",
+    "login": "your-email@example.com",
+    "pwd": "veryS3cr3t"
+  }
+}
