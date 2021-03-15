@@ -17,15 +17,19 @@ and blocks, for example to use a different signature for the plaintext and html 
 
 [1]: https://jinja.palletsprojects.com/templates/
 
-For-cycles are also available, {% if not features %}but unfortunately we couldn't show off because the needed data
-weren't provided for you.{% else %}so specifically for you, we have chosen the following set of features to point-out,
-which were rendered using a for-cycle:
+{% if not features %}
+For example, you are seeing this, because no rich data was provided for you.
+{% else %}
+For example, specifically for you, we have chosen the following features to point-out and render using a for-cycle:
 
-|feature|description|
-|--|--|
+{% set keylen = ((features.keys() | list) + ["feature"]) | map('length') | max %}
+{% set vallen = ((features.values() | list) + ["description"]) | map('length') | max %}
+|{{ "feature" | center(keylen + 2) }}|{{ "description" | center(vallen + 2) }}|
+|{{ "-"*(keylen + 2) }}|{{ "-" * (vallen + 2) }}|
 {% for feature, description in features.items() %}
-|{{ feature }}|{{ description }}|
-{% endfor %}{% endif %}
+|{{ feature | center(keylen + 2) }}|{{ description | center(vallen + 2) }}|
+{% endfor %}
+{% endif %}
 
 Anyways, that's it, I'll be happy to see you contribute your pull requests and report issues on Github.
 {% endfilter %}
