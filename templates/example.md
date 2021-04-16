@@ -1,10 +1,5 @@
 {% if not txt %}
-<style>
-    #mailmerge-main-body > p {
-        margin-bottom: 1em;
-    }
-</style>
-<div id="mailmerge-main-body">
+<div id="main-body">
 {% endif %}
 {% filter md %}
 Dear {{ first_name }},
@@ -16,6 +11,14 @@ importantly, a markdown filter is available (this block is wrapped in it), but y
 and blocks, for example to use a different signature for the plaintext and html versions of the mail.
 
 [1]: https://jinja.palletsprojects.com/templates/
+
+### Features
+
+- lists
+    - that support
+    - sub items
+- with clear separation of blocks
+- styling customization soon
 
 {% if not features %}
 For example, you are seeing this, because no rich data was provided for you.

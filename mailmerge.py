@@ -1,5 +1,6 @@
 import os
 import subprocess
+import re
 import sys
 from argparse import ArgumentParser
 from email.message import EmailMessage
@@ -11,6 +12,7 @@ from typing import List, Dict, Optional, NewType, Any
 import jinja2
 import pydantic
 import yaml
+from bs4 import BeautifulSoup
 from markdown import Markdown
 from pydantic import Field
 from pydantic.main import BaseModel
@@ -192,7 +194,22 @@ def main(
         conn.login(sender_config.login, sender_config.pwd)
 
         for recipient_data in data.recipients:
-            html = html_template.render(recipient_data.fields)
+            soup = BeautifulSoup(
+                html_template.render(recipient_data.fields), features="html.parser"
+            )
+
+            body = soup.find(id="main-body")
+            for p in body.find_all("p", recursive=False):
+                p.attrs["style"] = "margin:0.6em 0;line-height:1.4"
+            for p in body.find_all(re.compile("^h[1-9]$"), recursive=False):
+                p.attrs["style"] = "margin:0.8em 0 0;font-size:1.1em"
+            for p in body.select("li > p"):
+                p.attrs["style"] = "margin-bottom:0;"
+            for p in body.select(":scope > ul > li"):
+                p.attrs["style"] = "margin-top:0.5em;"
+
+            html = str(soup)
+
             txt = txt_template.render(recipient_data.fields)
 
             if confirmations:
