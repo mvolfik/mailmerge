@@ -33,11 +33,11 @@ The following fields are available (see `example-senderconfig.json` for an examp
     - **beware: nothing is done about `CC` and other headers** that might affect sending, so preferrably set these in
       sender config, not in the individual campaign data files)
 
-### Create your template and data file
+### Create your email code and data
 
-Create your own template (and signatures etc) and campaign data file. They need to have the same name, let's
-say `templates/campaign.md` and `data/campaign.yaml`. Template is a Jinja2 template, see `templates/example.md`. In data
-file, you can configure the following:
+Create the template for the email and data for each recipient. Create the mail in `mails/name.txt` with data as a YAML
+front matter. The content is a Jinja2 template. See `mails/example.txt` for various possibilities. In the data file, you
+can configure the following:
 
 - global `headers`: again, these are copied directly – you likely want to specify `Subject` here
     - if there's a header with the exactly same name in sender config and campaign, the sender config one is preferred
@@ -45,7 +45,7 @@ file, you can configure the following:
   attachments yet, so these aren't implemented)
 - `recipients`: a list of recipients with the following properties
     - `address` will be added as a `To` header
-    - `fields` is a dictionary, the values are passed directly into the template, so you can make use of various
+    - `fields` is a dictionary, the values are passed directly into the template, so you can make use of various data
       structures
 
 ### Finally, the CLI
@@ -55,7 +55,7 @@ $ python3 mailmerge.py -h
 usage: mailmerge.py [-h] [--sender {your,created,senderconfigs}] [--no-confirmations] campaign
 
 positional arguments:
-  campaign              The name of the data file + template to send
+  campaign              The name of the file to use (`mails/<campaign>.txt`)
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -101,6 +101,9 @@ More paragraphs
 It should be possible to just create the message and export it as EML, without providing any credentials or SMTP server.
 
 Addressee-specific headers and attachments will probably be needed at some point.
+
+Styling could also do better – since emails don't support the `<style>` tag (well enough), some basic styling is
+currently done in the Python code, with BeautifulSoup4.
 
 ## License
 

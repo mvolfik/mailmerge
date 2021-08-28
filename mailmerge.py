@@ -1,6 +1,6 @@
 import os
-import subprocess
 import re
+import subprocess
 import sys
 from argparse import ArgumentParser
 from email.message import EmailMessage
@@ -9,15 +9,15 @@ from smtplib import SMTP_SSL
 from tempfile import NamedTemporaryFile
 from typing import List, Dict, Optional, NewType, Any
 
+import frontmatter
 import jinja2
 import pydantic
-import yaml
 from bs4 import BeautifulSoup
 from markdown import Markdown
 from pydantic import Field
 from pydantic.main import BaseModel
 
-loader = jinja2.FileSystemLoader("templates/")
+loader = jinja2.FileSystemLoader("includes")
 
 html_renderer = jinja2.Environment(loader=loader, lstrip_blocks=True, trim_blocks=True)
 html_renderer.filters["md"] = Markdown(extensions=["tables"]).convert
@@ -173,12 +173,13 @@ def main(
     sender_config: SenderConfig,
     confirmations: bool = False,  # default for function is False, but default for CLI is True
 ) -> int:
-    template_name = campaign + ".md"
-    html_template = html_renderer.get_template(template_name)
-    txt_template = txt_renderer.get_template(template_name)
+    with open(f"mails/{campaign}.txt") as fh:
+        content = frontmatter.load(fh)
 
-    with open(f"data/{campaign}.yaml") as fh:
-        data = CampaignData.parse_obj(yaml.safe_load(fh))
+    html_template = html_renderer.from_string(content.content)
+    txt_template = txt_renderer.from_string(content.content)
+
+    data = CampaignData.parse_obj(content.metadata)
 
     headers = data.headers
     headers.update(sender_config.headers)
@@ -239,7 +240,7 @@ def cli() -> None:
 
     argparser = ArgumentParser()
     argparser.add_argument(
-        "campaign", help="The name of the data file + template to send"
+        "campaign", help="The name of the file to use (`mails/<campaign>.txt`)"
     )
     argparser.add_argument(
         "--sender", choices=senderconfig.keys(), help="Name of the senderconfig to use"
